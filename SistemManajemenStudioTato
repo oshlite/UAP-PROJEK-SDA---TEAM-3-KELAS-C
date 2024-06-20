@@ -437,4 +437,76 @@ class ManajemenStudioTatoGUI:
         self.sort_button = ttk.Button(frame_sort_search, text="Sort", command=self.sort_pelanggan)
         self.sort_button.grid(column=2, row=0, padx=5, pady=5)
   
+    def hapus_pelanggan(self):
+        id_pelanggan = self.id_pelanggan_entry.get()
 
+        if id_pelanggan:
+            if self.studio.hapus_pelanggan(id_pelanggan):
+                messagebox.showinfo("Sukses", "Data pelanggan berhasil dihapus!")
+                self.lihat_pelanggan()
+            else:
+                messagebox.showerror("Error", "ID Pelanggan tidak ditemukan!")
+        else:
+            messagebox.showerror("Error", "Masukkan ID Pelanggan untuk menghapus!")
+
+    def sort_pelanggan(self):
+        sort_by = self.sort_by_combobox.get()
+        self.studio.sort_list('pelanggan_list', sort_by)
+        self.lihat_pelanggan()
+
+    def search_pelanggan(self):
+        keyword = self.search_entry.get()
+        if keyword:
+            results = self.studio.search_list('pelanggan_list', 'nama', keyword)
+            for i in self.tree.get_children():
+                self.tree.delete(i)
+            for pelanggan in results:
+                self.tree.insert("", "end", values=(pelanggan.id_pelanggan, pelanggan.nama, pelanggan.kontak, pelanggan.preferensi))
+        else:
+            messagebox.showerror("Error", "Masukkan kata kunci untuk pencarian!")
+
+    def tambah_jadwal(self):
+        id_jadwal = self.id_jadwal_entry.get()
+        TatoArtist = self.tato_artist_entry.get()
+        Waktu = self.waktu_entry.get()
+
+        if id_jadwal and TatoArtist and Waktu:
+            jadwal = Jadwal(id_jadwal, TatoArtist, Waktu)
+            self.studio.tambah_jadwal(jadwal)
+            messagebox.showinfo("Sukses", "Data jadwal berhasil ditambahkan!")
+            self.lihat_jadwal()
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi untuk tambah jadwal!")
+
+    def lihat_jadwal(self):
+        for i in self.jadwal_tree.get_children():
+            self.jadwal_tree.delete(i)
+        jadwal_list = self.studio.lihat_jadwal()
+        for jadwal in jadwal_list:
+            self.jadwal_tree.insert("", "end", values=(jadwal.id_jadwal, jadwal.TatoArtist, jadwal.Waktu))
+
+    def update_jadwal(self):
+        id_jadwal = self.id_jadwal_entry.get()
+        TatoArtist = self.tato_artist_entry.get()
+        Waktu = self.waktu_entry.get()
+
+        if id_jadwal and TatoArtist and Waktu:
+            if self.studio.update_jadwal(id_jadwal, TatoArtist, Waktu):
+                messagebox.showinfo("Sukses", "Data jadwal berhasil diupdate!")
+                self.lihat_jadwal()
+            else:
+                messagebox.showerror("Error", "ID Jadwal tidak ditemukan!")
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi untuk update jadwal!")
+
+    def hapus_jadwal(self):
+        id_jadwal = self.id_jadwal_entry.get()
+
+        if id_jadwal:
+            if self.studio.hapus_jadwal(id_jadwal):
+                messagebox.showinfo("Sukses", "Data jadwal berhasil dihapus!")
+                self.lihat_jadwal()
+            else:
+                messagebox.showerror("Error", "ID Jadwal tidak ditemukan!")
+        else:
+            messagebox.showerror("Error", "Masukkan ID Jadwal untuk menghapus!")
