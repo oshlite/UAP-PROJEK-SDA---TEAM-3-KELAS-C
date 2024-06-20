@@ -185,6 +185,39 @@ class ManajemenStudioTatoGUI:
 
         frame_tombol = ttk.Frame(self.tab_pelanggan)
         frame_tombol.pack(padx=10, pady=10)
+
+        self.tambah_button = ttk.Button(frame_tombol, text="Tambah Pelanggan", command=self.tambah_pelanggan)
+        self.tambah_button.grid(column=0, row=0, padx=5, pady=5)
+
+        self.lihat_button = ttk.Button(frame_tombol, text="Lihat Pelanggan", command=self.lihat_pelanggan)
+        self.lihat_button.grid(column=1, row=0, padx=5, pady=5)
+
+        self.update_button = ttk.Button(frame_tombol, text="Update Pelanggan", command=self.update_pelanggan)
+        self.update_button.grid(column=2, row=0, padx=5, pady=5)
+
+        self.hapus_button = ttk.Button(frame_tombol, text="Hapus Pelanggan", command=self.hapus_pelanggan)
+        self.hapus_button.grid(column=3, row=0, padx=5, pady=5)
+
+        frame_data = ttk.Frame(self.tab_pelanggan)
+        frame_data.pack(padx=10, pady=10)
+
+        self.tree = ttk.Treeview(frame_data, columns=("ID Pelanggan", "Nama", "Kontak", "Preferensi"), show='headings')
+        self.tree.heading("ID Pelanggan", text="ID Pelanggan")
+        self.tree.heading("Nama", text="Nama")
+        self.tree.heading("Kontak", text="Kontak")
+        self.tree.heading("Preferensi", text="Preferensi")
+        self.tree.pack()
+
+        frame_sort_search = ttk.Frame(self.tab_pelanggan)
+        frame_sort_search.pack(padx=10, pady=10)
+
+        ttk.Label(frame_sort_search, text="Sort by:").grid(column=0, row=0, padx=5, pady=5)
+        self.sort_by_combobox = ttk.Combobox(frame_sort_search, values=["id_pelanggan", "nama", "kontak", "preferensi"])
+        self.sort_by_combobox.grid(column=1, row=0, padx=5, pady=5)
+
+        self.sort_button = ttk.Button(frame_sort_search, text="Sort", command=self.sort_pelanggan)
+        self.sort_button.grid(column=2, row=0, padx=5, pady=5)
+
         ttk.Label(frame_sort_search, text="Search:").grid(column=0, row=1, padx=5, pady=5)
         self.search_entry = ttk.Entry(frame_sort_search)
         self.search_entry.grid(column=1, row=1, padx=5, pady=5)
@@ -404,39 +437,6 @@ class ManajemenStudioTatoGUI:
         else:
             messagebox.showerror("Error", "Semua field harus diisi untuk update pelanggan!")
 
-
-        self.tambah_button = ttk.Button(frame_tombol, text="Tambah Pelanggan", command=self.tambah_pelanggan)
-        self.tambah_button.grid(column=0, row=0, padx=5, pady=5)
-
-        self.lihat_button = ttk.Button(frame_tombol, text="Lihat Pelanggan", command=self.lihat_pelanggan)
-        self.lihat_button.grid(column=1, row=0, padx=5, pady=5)
-
-        self.update_button = ttk.Button(frame_tombol, text="Update Pelanggan", command=self.update_pelanggan)
-        self.update_button.grid(column=2, row=0, padx=5, pady=5)
-
-        self.hapus_button = ttk.Button(frame_tombol, text="Hapus Pelanggan", command=self.hapus_pelanggan)
-        self.hapus_button.grid(column=3, row=0, padx=5, pady=5)
-
-        frame_data = ttk.Frame(self.tab_pelanggan)
-        frame_data.pack(padx=10, pady=10)
-
-        self.tree = ttk.Treeview(frame_data, columns=("ID Pelanggan", "Nama", "Kontak", "Preferensi"), show='headings')
-        self.tree.heading("ID Pelanggan", text="ID Pelanggan")
-        self.tree.heading("Nama", text="Nama")
-        self.tree.heading("Kontak", text="Kontak")
-        self.tree.heading("Preferensi", text="Preferensi")
-        self.tree.pack()
-
-        frame_sort_search = ttk.Frame(self.tab_pelanggan)
-        frame_sort_search.pack(padx=10, pady=10)
-
-        ttk.Label(frame_sort_search, text="Sort by:").grid(column=0, row=0, padx=5, pady=5)
-        self.sort_by_combobox = ttk.Combobox(frame_sort_search, values=["id_pelanggan", "nama", "kontak", "preferensi"])
-        self.sort_by_combobox.grid(column=1, row=0, padx=5, pady=5)
-
-        self.sort_button = ttk.Button(frame_sort_search, text="Sort", command=self.sort_pelanggan)
-        self.sort_button.grid(column=2, row=0, padx=5, pady=5)
-  
     def hapus_pelanggan(self):
         id_pelanggan = self.id_pelanggan_entry.get()
 
