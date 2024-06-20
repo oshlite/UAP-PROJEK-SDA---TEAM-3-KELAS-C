@@ -185,6 +185,225 @@ class ManajemenStudioTatoGUI:
 
         frame_tombol = ttk.Frame(self.tab_pelanggan)
         frame_tombol.pack(padx=10, pady=10)
+        ttk.Label(frame_sort_search, text="Search:").grid(column=0, row=1, padx=5, pady=5)
+        self.search_entry = ttk.Entry(frame_sort_search)
+        self.search_entry.grid(column=1, row=1, padx=5, pady=5)
+
+        self.search_button = ttk.Button(frame_sort_search, text="Search", command=self.search_pelanggan)
+        self.search_button.grid(column=2, row=1, padx=5, pady=5)
+
+    def create_jadwal_widgets(self):
+        frame_input = ttk.Frame(self.tab_jadwal)
+        frame_input.pack(padx=10, pady=10)
+
+        ttk.Label(frame_input, text="ID Jadwal:").grid(column=0, row=0, padx=5, pady=5)
+        self.id_jadwal_entry = ttk.Entry(frame_input)
+        self.id_jadwal_entry.grid(column=1, row=0, padx=5, pady=5)
+
+        ttk.Label(frame_input, text="Tato Artist:").grid(column=0, row=1, padx=5, pady=5)
+        self.tato_artist_entry = ttk.Entry(frame_input)
+        self.tato_artist_entry.grid(column=1, row=1, padx=5, pady=5)
+
+        ttk.Label(frame_input, text="Waktu:").grid(column=0, row=2, padx=5, pady=5)
+        self.waktu_entry = ttk.Entry(frame_input)
+        self.waktu_entry.grid(column=1, row=2, padx=5, pady=5)
+
+        frame_tombol = ttk.Frame(self.tab_jadwal)
+        frame_tombol.pack(padx=10, pady=10)
+
+        self.tambah_jadwal_button = ttk.Button(frame_tombol, text="Tambah Jadwal", command=self.tambah_jadwal)
+        self.tambah_jadwal_button.grid(column=0, row=0, padx=5, pady=5)
+
+        self.lihat_jadwal_button = ttk.Button(frame_tombol, text="Lihat Jadwal", command=self.lihat_jadwal)
+        self.lihat_jadwal_button.grid(column=1, row=0, padx=5, pady=5)
+
+        self.update_jadwal_button = ttk.Button(frame_tombol, text="Update Jadwal", command=self.update_jadwal)
+        self.update_jadwal_button.grid(column=2, row=0, padx=5, pady=5)
+
+        self.hapus_jadwal_button = ttk.Button(frame_tombol, text="Hapus Jadwal", command=self.hapus_jadwal)
+        self.hapus_jadwal_button.grid(column=3, row=0, padx=5, pady=5)
+
+        frame_data = ttk.Frame(self.tab_jadwal)
+        frame_data.pack(padx=10, pady=10)
+
+        self.jadwal_tree = ttk.Treeview(frame_data, columns=("ID Jadwal", "Tato Artist", "Waktu"), show='headings')
+        self.jadwal_tree.heading("ID Jadwal", text="ID Jadwal")
+        self.jadwal_tree.heading("Tato Artist", text="Tato Artist")
+        self.jadwal_tree.heading("Waktu", text="Waktu")
+        self.jadwal_tree.pack()
+
+        frame_sort_search = ttk.Frame(self.tab_jadwal)
+        frame_sort_search.pack(padx=10, pady=10)
+
+        ttk.Label(frame_sort_search, text="Sort by:").grid(column=0, row=0, padx=5, pady=5)
+        self.sort_by_jadwal_combobox = ttk.Combobox(frame_sort_search, values=["id_jadwal", "TatoArtist", "Waktu"])
+        self.sort_by_jadwal_combobox.grid(column=1, row=0, padx=5, pady=5)
+
+        self.sort_jadwal_button = ttk.Button(frame_sort_search, text="Sort", command=self.sort_jadwal)
+        self.sort_jadwal_button.grid(column=2, row=0, padx=5, pady=5)
+
+        ttk.Label(frame_sort_search, text="Search:").grid(column=0, row=1, padx=5, pady=5)
+        self.search_jadwal_entry = ttk.Entry(frame_sort_search)
+        self.search_jadwal_entry.grid(column=1, row=1, padx=5, pady=5)
+
+        self.search_jadwal_button = ttk.Button(frame_sort_search, text="Search", command=self.search_jadwal)
+        self.search_jadwal_button.grid(column=2, row=1, padx=5, pady=5)
+
+    def create_reservasi_widgets(self):
+        frame_reservasi = ttk.Frame(self.tab_reservasi)
+        frame_reservasi.pack(padx=10, pady=10)
+
+        ttk.Label(frame_reservasi, text="ID Reservasi:").grid(column=0, row=0, padx=5, pady=5)
+        self.id_reservasi_entry = ttk.Entry(frame_reservasi)
+        self.id_reservasi_entry.grid(column=1, row=0, padx=5, pady=5)
+
+        ttk.Label(frame_reservasi, text="ID Pelanggan:").grid(column=0, row=1, padx=5, pady=5)
+        self.id_pelanggan_reservasi_entry = ttk.Entry(frame_reservasi)
+        self.id_pelanggan_reservasi_entry.grid(column=1, row=1, padx=5, pady=5)
+
+        ttk.Label(frame_reservasi, text="ID Jadwal:").grid(column=0, row=2, padx=5, pady=5)
+        self.id_jadwal_reservasi_entry = ttk.Entry(frame_reservasi)
+        self.id_jadwal_reservasi_entry.grid(column=1, row=2, padx=5, pady=5)
+
+        ttk.Label(frame_reservasi, text="Status:").grid(column=0, row=3, padx=5, pady=5)
+        self.status_reservasi_entry = ttk.Entry(frame_reservasi)
+        self.status_reservasi_entry.grid(column=1, row=3, padx=5, pady=5)
+
+        frame_tombol_reservasi = ttk.Frame(self.tab_reservasi)
+        frame_tombol_reservasi.pack(padx=10, pady=10)
+
+        self.reservasi_button = ttk.Button(frame_tombol_reservasi, text="Tambah Reservasi", command=self.tambah_reservasi)
+        self.reservasi_button.grid(column=0, row=0, padx=5, pady=5)
+
+        self.lihat_reservasi_button = ttk.Button(frame_tombol_reservasi, text="Lihat Reservasi", command=self.lihat_reservasi)
+        self.lihat_reservasi_button.grid(column=1, row=0, padx=5, pady=5)
+
+        self.update_reservasi_button = ttk.Button(frame_tombol_reservasi, text="Update Reservasi", command=self.update_reservasi)
+        self.update_reservasi_button.grid(column=2, row=0, padx=5, pady=5)
+
+        self.hapus_reservasi_button = ttk.Button(frame_tombol_reservasi, text="Hapus Reservasi", command=self.hapus_reservasi)
+        self.hapus_reservasi_button.grid(column=3, row=0, padx=5, pady=5)
+
+        frame_data_reservasi = ttk.Frame(self.tab_reservasi)
+        frame_data_reservasi.pack(padx=10, pady=10)
+
+        self.reservasi_tree = ttk.Treeview(frame_data_reservasi, columns=("ID Reservasi", "ID Pelanggan", "ID Jadwal", "Status"), show='headings')
+        self.reservasi_tree.heading("ID Reservasi", text="ID Reservasi")
+        self.reservasi_tree.heading("ID Pelanggan", text="ID Pelanggan")
+        self.reservasi_tree.heading("ID Jadwal", text="ID Jadwal")
+        self.reservasi_tree.heading("Status", text="Status")
+        self.reservasi_tree.pack()
+
+        frame_sort_search = ttk.Frame(self.tab_reservasi)
+        frame_sort_search.pack(padx=10, pady=10)
+
+        ttk.Label(frame_sort_search, text="Sort by:").grid(column=0, row=0, padx=5, pady=5)
+        self.sort_by_reservasi_combobox = ttk.Combobox(frame_sort_search, values=["id_reservasi", "id_pelanggan", "id_jadwal", "status"])
+        self.sort_by_reservasi_combobox.grid(column=1, row=0, padx=5, pady=5)
+
+        self.sort_reservasi_button = ttk.Button(frame_sort_search, text="Sort", command=self.sort_reservasi)
+        self.sort_reservasi_button.grid(column=2, row=0, padx=5, pady=5)
+
+        ttk.Label(frame_sort_search, text="Search:").grid(column=0, row=1, padx=5, pady=5)
+        self.search_reservasi_entry = ttk.Entry(frame_sort_search)
+        self.search_reservasi_entry.grid(column=1, row=1, padx=5, pady=5)
+
+        self.search_reservasi_button = ttk.Button(frame_sort_search, text="Search", command=self.search_reservasi)
+        self.search_reservasi_button.grid(column=2, row=1, padx=5, pady=5)
+
+    def create_desain_tato_widgets(self):
+        frame_desain_tato = ttk.Frame(self.tab_desain_tato)
+        frame_desain_tato.pack(padx=10, pady=10)
+
+        ttk.Label(frame_desain_tato, text="ID Desain:").grid(column=0, row=0, padx=5, pady=5)
+        self.id_desain_entry = ttk.Entry(frame_desain_tato)
+        self.id_desain_entry.grid(column=1, row=0, padx=5, pady=5)
+
+        ttk.Label(frame_desain_tato, text="Nama Desain:").grid(column=0, row=1, padx=5, pady=5)
+        self.nama_desain_entry = ttk.Entry(frame_desain_tato)
+        self.nama_desain_entry.grid(column=1, row=1, padx=5, pady=5)
+
+        ttk.Label(frame_desain_tato, text="Deskripsi:").grid(column=0, row=2, padx=5, pady=5)
+        self.deskripsi_entry = ttk.Entry(frame_desain_tato)
+        self.deskripsi_entry.grid(column=1, row=2, padx=5, pady=5)
+
+        frame_tombol_desain_tato = ttk.Frame(self.tab_desain_tato)
+        frame_tombol_desain_tato.pack(padx=10, pady=10)
+
+        self.tambah_desain_button = ttk.Button(frame_tombol_desain_tato, text="Tambah Desain", command=self.tambah_desain_tato)
+        self.tambah_desain_button.grid(column=0, row=0, padx=5, pady=5)
+
+        self.lihat_desain_button = ttk.Button(frame_tombol_desain_tato, text="Lihat Desain", command=self.lihat_desain_tato)
+        self.lihat_desain_button.grid(column=1, row=0, padx=5, pady=5)
+
+        self.update_desain_button = ttk.Button(frame_tombol_desain_tato, text="Update Desain", command=self.update_desain_tato)
+        self.update_desain_button.grid(column=2, row=0, padx=5, pady=5)
+
+        self.hapus_desain_button = ttk.Button(frame_tombol_desain_tato, text="Hapus Desain", command=self.hapus_desain_tato)
+        self.hapus_desain_button.grid(column=3, row=0, padx=5, pady=5)
+
+        frame_data_desain_tato = ttk.Frame(self.tab_desain_tato)
+        frame_data_desain_tato.pack(padx=10, pady=10)
+
+        self.desain_tree = ttk.Treeview(frame_data_desain_tato, columns=("ID Desain", "Nama Desain", "Deskripsi"), show='headings')
+        self.desain_tree.heading("ID Desain", text="ID Desain")
+        self.desain_tree.heading("Nama Desain", text="Nama Desain")
+        self.desain_tree.heading("Deskripsi", text="Deskripsi")
+        self.desain_tree.pack()
+
+        frame_sort_search = ttk.Frame(self.tab_desain_tato)
+        frame_sort_search.pack(padx=10, pady=10)
+
+        ttk.Label(frame_sort_search, text="Sort by:").grid(column=0, row=0, padx=5, pady=5)
+        self.sort_by_desain_combobox = ttk.Combobox(frame_sort_search, values=["id_desain", "nama_desain", "deskripsi"])
+        self.sort_by_desain_combobox.grid(column=1, row=0, padx=5, pady=5)
+
+        self.sort_desain_button = ttk.Button(frame_sort_search, text="Sort", command=self.sort_desain_tato)
+        self.sort_desain_button.grid(column=2, row=0, padx=5, pady=5)
+
+        ttk.Label(frame_sort_search, text="Search:").grid(column=0, row=1, padx=5, pady=5)
+        self.search_desain_entry = ttk.Entry(frame_sort_search)
+        self.search_desain_entry.grid(column=1, row=1, padx=5, pady=5)
+
+        self.search_desain_button = ttk.Button(frame_sort_search, text="Search", command=self.search_desain_tato)
+        self.search_desain_button.grid(column=2, row=1, padx=5, pady=5)
+
+    def tambah_pelanggan(self):
+        id_pelanggan = self.id_pelanggan_entry.get()
+        nama = self.nama_entry.get()
+        kontak = self.kontak_entry.get()
+        preferensi = self.preferensi_entry.get()
+
+        if id_pelanggan and nama and kontak and preferensi:
+            pelanggan = Pelanggan(id_pelanggan, nama, kontak, preferensi)
+            self.studio.tambah_pelanggan(pelanggan)
+            messagebox.showinfo("Sukses", "Data pelanggan berhasil ditambahkan!")
+            self.lihat_pelanggan()
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi untuk tambah pelanggan!")
+
+    def lihat_pelanggan(self):
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+        pelanggan_list = self.studio.lihat_pelanggan()
+        for pelanggan in pelanggan_list:
+            self.tree.insert("", "end", values=(pelanggan.id_pelanggan, pelanggan.nama, pelanggan.kontak, pelanggan.preferensi))
+
+    def update_pelanggan(self):
+        id_pelanggan = self.id_pelanggan_entry.get()
+        nama = self.nama_entry.get()
+        kontak = self.kontak_entry.get()
+        preferensi = self.preferensi_entry.get()
+
+        if id_pelanggan and nama and kontak and preferensi:
+            if self.studio.update_pelanggan(id_pelanggan, nama, kontak, preferensi):
+                messagebox.showinfo("Sukses", "Data pelanggan berhasil diupdate!")
+                self.lihat_pelanggan()
+            else:
+                messagebox.showerror("Error", "ID Pelanggan tidak ditemukan!")
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi untuk update pelanggan!")
+
 
         self.tambah_button = ttk.Button(frame_tombol, text="Tambah Pelanggan", command=self.tambah_pelanggan)
         self.tambah_button.grid(column=0, row=0, padx=5, pady=5)
@@ -217,4 +436,5 @@ class ManajemenStudioTatoGUI:
 
         self.sort_button = ttk.Button(frame_sort_search, text="Sort", command=self.sort_pelanggan)
         self.sort_button.grid(column=2, row=0, padx=5, pady=5)
+  
 
