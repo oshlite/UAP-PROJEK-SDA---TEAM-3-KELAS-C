@@ -652,3 +652,9 @@ class ManajemenStudioTatoGUI:
                 self.desain_tree.insert("", "end", values=(desain_tato.id_desain, desain_tato.nama_desain, desain_tato.deskripsi))
         else:
             messagebox.showerror("Error", "Masukkan kata kunci untuk pencarian!")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    studio = StudioTato()
+    app = ManajemenStudioTatoGUI(root, studio)
+    root.mainloop()
