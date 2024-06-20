@@ -1,1 +1,220 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+
+class Pelanggan:
+    def __init__(self, id_pelanggan, nama, kontak, preferensi):
+        self.id_pelanggan = id_pelanggan
+        self.nama = nama
+        self.kontak = kontak
+        self.preferensi = preferensi
+
+class Jadwal:
+    def __init__(self, id_jadwal, TatoArtist, Waktu):
+        self.id_jadwal = id_jadwal
+        self.TatoArtist = TatoArtist
+        self.Waktu = Waktu
+
+class Reservasi:
+    def __init__(self, id_reservasi, id_pelanggan, id_jadwal, status="Pending"):
+        self.id_reservasi = id_reservasi
+        self.id_pelanggan = id_pelanggan
+        self.id_jadwal = id_jadwal
+        self.status = status
+
+class DesainTato:
+    def __init__(self, id_desain, nama_desain, deskripsi):
+        self.id_desain = id_desain
+        self.nama_desain = nama_desain
+        self.deskripsi = deskripsi
+
+class StudioTato:
+    def __init__(self):
+        self.pelanggan_list = []
+        self.jadwal_list = []
+        self.reservasi_list = []
+        self.desain_tato_list = []
+
+    def tambah_pelanggan(self, pelanggan):
+        self.pelanggan_list.append(pelanggan)
+
+    def tambah_jadwal(self, jadwal):
+        self.jadwal_list.append(jadwal)
+
+    def tambah_reservasi(self, reservasi):
+        self.reservasi_list.append(reservasi)
+
+    def tambah_desain_tato(self, desain_tato):
+        self.desain_tato_list.append(desain_tato)
+
+    def lihat_pelanggan(self):
+        return self.pelanggan_list
+
+    def lihat_jadwal(self):
+        return self.jadwal_list
+
+    def lihat_reservasi(self):
+        return self.reservasi_list
+
+    def lihat_desain_tato(self):
+        return self.desain_tato_list
+
+    def update_pelanggan(self, id_pelanggan, nama, kontak, preferensi):
+        for pelanggan in self.pelanggan_list:
+            if pelanggan.id_pelanggan == id_pelanggan:
+                pelanggan.nama = nama
+                pelanggan.kontak = kontak
+                pelanggan.preferensi = preferensi
+                return True
+        return False
+
+    def update_jadwal(self, id_jadwal, TatoArtist, Waktu):
+        for jadwal in self.jadwal_list:
+            if jadwal.id_jadwal == id_jadwal:
+                jadwal.TatoArtist = TatoArtist
+                jadwal.Waktu = Waktu
+                return True
+        return False
+
+    def update_reservasi_status(self, id_reservasi, status):
+        for reservasi in self.reservasi_list:
+            if reservasi.id_reservasi == id_reservasi:
+                reservasi.status = status
+                return True
+        return False
+
+    def update_desain_tato(self, id_desain, nama_desain, deskripsi):
+        for desain_tato in self.desain_tato_list:
+            if desain_tato.id_desain == id_desain:
+                desain_tato.nama_desain = nama_desain
+                desain_tato.deskripsi = deskripsi
+                return True
+        return False
+
+    def hapus_pelanggan(self, id_pelanggan):
+        self.pelanggan_list = [pelanggan for pelanggan in self.pelanggan_list if pelanggan.id_pelanggan != id_pelanggan]
+        return True
+
+    def hapus_jadwal(self, id_jadwal):
+        self.jadwal_list = [jadwal for jadwal in self.jadwal_list if jadwal.id_jadwal != id_jadwal]
+        return True
+
+    def hapus_reservasi(self, id_reservasi):
+        self.reservasi_list = [reservasi for reservasi in self.reservasi_list if reservasi.id_reservasi != id_reservasi]
+        return True
+
+    def hapus_desain_tato(self, id_desain):
+        self.desain_tato_list = [desain for desain in self.desain_tato_list if desain.id_desain != id_desain]
+        return True
+
+    def sort_list(self, list_name, attribute, reverse=False):
+        if list_name == 'pelanggan_list':
+            self.pelanggan_list.sort(key=lambda x: getattr(x, attribute), reverse=reverse)
+        elif list_name == 'jadwal_list':
+            self.jadwal_list.sort(key=lambda x: getattr(x, attribute), reverse=reverse)
+        elif list_name == 'reservasi_list':
+            self.reservasi_list.sort(key=lambda x: getattr(x, attribute), reverse=reverse)
+        elif list_name == 'desain_tato_list':
+            self.desain_tato_list.sort(key=lambda x: getattr(x, attribute), reverse=reverse)
+
+    def search_list(self, list_name, attribute, keyword):
+        if list_name == 'pelanggan_list':
+            return [item for item in self.pelanggan_list if keyword.lower() in str(getattr(item, attribute)).lower()]
+        elif list_name == 'jadwal_list':
+            return [item for item in self.jadwal_list if keyword.lower() in str(getattr(item, attribute)).lower()]
+        elif list_name == 'reservasi_list':
+            return [item for item in self.reservasi_list if keyword.lower() in str(getattr(item, attribute)).lower()]
+        elif list_name == 'desain_tato_list':
+            return [item for item in self.desain_tato_list if keyword.lower() in str(getattr(item, attribute)).lower()]
+
+class ManajemenStudioTatoGUI:
+    def __init__(self, root, studio):
+        self.root = root
+        self.studio = studio
+        self.root.title("Manajemen Studio Tato")
+
+        self.tabControl = ttk.Notebook(self.root)
+
+        self.tab_pelanggan = ttk.Frame(self.tabControl)
+        self.tabControl.add(self.tab_pelanggan, text="Data Pelanggan")
+
+        self.tab_jadwal = ttk.Frame(self.tabControl)
+        self.tabControl.add(self.tab_jadwal, text="Jadwal Tato")
+
+        self.tab_reservasi = ttk.Frame(self.tabControl)
+        self.tabControl.add(self.tab_reservasi, text="Reservasi")
+
+        self.tab_desain_tato = ttk.Frame(self.tabControl)
+        self.tabControl.add(self.tab_desain_tato, text="Desain Tato")
+
+        self.tabControl.pack(expand=1, fill="both")
+
+        self.create_pelanggan_widgets()
+        self.create_jadwal_widgets()
+        self.create_reservasi_widgets()
+        self.create_desain_tato_widgets()
+
+        self.set_styles()
+
+    def set_styles(self):
+        style = ttk.Style()
+        style.configure("TFrame", background="#FAF3DD")
+        style.configure("TLabel", background="#FAF3DD", font=('Arial', 10))
+        style.configure("TButton", background="#FFCAD4", foreground="#000000", font=('Arial', 10, 'bold'))
+        style.configure("TEntry", background="#E2F0CB", foreground="#000000")
+        style.configure("TCombobox", background="#E2F0CB", foreground="#000000")
+
+    def create_pelanggan_widgets(self):
+        frame_input = ttk.Frame(self.tab_pelanggan)
+        frame_input.pack(padx=10, pady=10)
+
+        ttk.Label(frame_input, text="ID Pelanggan:").grid(column=0, row=0, padx=5, pady=5)
+        self.id_pelanggan_entry = ttk.Entry(frame_input)
+        self.id_pelanggan_entry.grid(column=1, row=0, padx=5, pady=5)
+
+        ttk.Label(frame_input, text="Nama:").grid(column=0, row=1, padx=5, pady=5)
+        self.nama_entry = ttk.Entry(frame_input)
+        self.nama_entry.grid(column=1, row=1, padx=5, pady=5)
+
+        ttk.Label(frame_input, text="Kontak:").grid(column=0, row=2, padx=5, pady=5)
+        self.kontak_entry = ttk.Entry(frame_input)
+        self.kontak_entry.grid(column=1, row=2, padx=5, pady=5)
+
+        ttk.Label(frame_input, text="Preferensi:").grid(column=0, row=3, padx=5, pady=5)
+        self.preferensi_entry = ttk.Entry(frame_input)
+        self.preferensi_entry.grid(column=1, row=3, padx=5, pady=5)
+
+        frame_tombol = ttk.Frame(self.tab_pelanggan)
+        frame_tombol.pack(padx=10, pady=10)
+
+        self.tambah_button = ttk.Button(frame_tombol, text="Tambah Pelanggan", command=self.tambah_pelanggan)
+        self.tambah_button.grid(column=0, row=0, padx=5, pady=5)
+
+        self.lihat_button = ttk.Button(frame_tombol, text="Lihat Pelanggan", command=self.lihat_pelanggan)
+        self.lihat_button.grid(column=1, row=0, padx=5, pady=5)
+
+        self.update_button = ttk.Button(frame_tombol, text="Update Pelanggan", command=self.update_pelanggan)
+        self.update_button.grid(column=2, row=0, padx=5, pady=5)
+
+        self.hapus_button = ttk.Button(frame_tombol, text="Hapus Pelanggan", command=self.hapus_pelanggan)
+        self.hapus_button.grid(column=3, row=0, padx=5, pady=5)
+
+        frame_data = ttk.Frame(self.tab_pelanggan)
+        frame_data.pack(padx=10, pady=10)
+
+        self.tree = ttk.Treeview(frame_data, columns=("ID Pelanggan", "Nama", "Kontak", "Preferensi"), show='headings')
+        self.tree.heading("ID Pelanggan", text="ID Pelanggan")
+        self.tree.heading("Nama", text="Nama")
+        self.tree.heading("Kontak", text="Kontak")
+        self.tree.heading("Preferensi", text="Preferensi")
+        self.tree.pack()
+
+        frame_sort_search = ttk.Frame(self.tab_pelanggan)
+        frame_sort_search.pack(padx=10, pady=10)
+
+        ttk.Label(frame_sort_search, text="Sort by:").grid(column=0, row=0, padx=5, pady=5)
+        self.sort_by_combobox = ttk.Combobox(frame_sort_search, values=["id_pelanggan", "nama", "kontak", "preferensi"])
+        self.sort_by_combobox.grid(column=1, row=0, padx=5, pady=5)
+
+        self.sort_button = ttk.Button(frame_sort_search, text="Sort", command=self.sort_pelanggan)
+        self.sort_button.grid(column=2, row=0, padx=5, pady=5)
 
