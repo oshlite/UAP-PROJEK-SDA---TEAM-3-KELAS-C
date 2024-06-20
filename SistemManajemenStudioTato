@@ -510,3 +510,75 @@ class ManajemenStudioTatoGUI:
                 messagebox.showerror("Error", "ID Jadwal tidak ditemukan!")
         else:
             messagebox.showerror("Error", "Masukkan ID Jadwal untuk menghapus!")
+
+    def sort_jadwal(self):
+        sort_by = self.sort_by_jadwal_combobox.get()
+        self.studio.sort_list('jadwal_list', sort_by)
+        self.lihat_jadwal()
+
+    def search_jadwal(self):
+        keyword = self.search_jadwal_entry.get()
+        if keyword:
+            results = self.studio.search_list('jadwal_list', 'TatoArtist', keyword)
+            for i in self.jadwal_tree.get_children():
+                self.jadwal_tree.delete(i)
+            for jadwal in results:
+                self.jadwal_tree.insert("", "end", values=(jadwal.id_jadwal, jadwal.TatoArtist, jadwal.Waktu))
+        else:
+            messagebox.showerror("Error", "Masukkan kata kunci untuk pencarian!")
+
+    def tambah_reservasi(self):
+        id_reservasi = self.id_reservasi_entry.get()
+        id_pelanggan = self.id_pelanggan_reservasi_entry.get()
+        id_jadwal = self.id_jadwal_reservasi_entry.get()
+        status = self.status_reservasi_entry.get()
+
+        if id_reservasi and id_pelanggan and id_jadwal and status:
+            reservasi = Reservasi(id_reservasi, id_pelanggan, id_jadwal, status)
+            self.studio.tambah_reservasi(reservasi)
+            messagebox.showinfo("Sukses", "Reservasi berhasil ditambahkan!")
+            self.lihat_reservasi()
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi untuk reservasi!")
+
+    def lihat_reservasi(self):
+        for i in self.reservasi_tree.get_children():
+            self.reservasi_tree.delete(i)
+        reservasi_list = self.studio.lihat_reservasi()
+        for reservasi in reservasi_list:
+            self.reservasi_tree.insert("", "end", values=(reservasi.id_reservasi, reservasi.id_pelanggan, reservasi.id_jadwal, reservasi.status))
+
+    def update_reservasi(self):
+        id_reservasi = self.id_reservasi_entry.get()
+        id_pelanggan = self.id_pelanggan_reservasi_entry.get()
+        id_jadwal = self.id_jadwal_reservasi_entry.get()
+        status = self.status_reservasi_entry.get()
+
+        if id_reservasi and id_pelanggan and id_jadwal and status:
+            if self.studio.update_reservasi_status(id_reservasi, status):
+                messagebox.showinfo("Sukses", "Status reservasi berhasil diupdate!")
+                self.lihat_reservasi()
+            else:
+                messagebox.showerror("Error", "ID Reservasi tidak ditemukan!")
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi untuk update reservasi!")
+
+    def hapus_reservasi(self):
+        id_reservasi = self.id_reservasi_entry.get()
+
+        if id_reservasi:
+            if self.studio.hapus_reservasi(id_reservasi):
+                messagebox.showinfo("Sukses", "Data reservasi berhasil dihapus!")
+                self.lihat_reservasi()
+            else:
+                messagebox.showerror("Error", "ID Reservasi tidak ditemukan!")
+        else:
+            messagebox.showerror("Error", "Masukkan ID Reservasi untuk menghapus!")
+
+    def sort_reservasi(self):
+        sort_by = self.sort_by_reservasi_combobox.get()
+        self.studio.sort_list('reservasi_list', sort_by)
+        self.lihat_reservasi()
+
+    def search_reservasi(self):
+        keyword = self.search_reservasi_entry.get()
