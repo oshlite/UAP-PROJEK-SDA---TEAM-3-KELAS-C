@@ -582,3 +582,73 @@ class ManajemenStudioTatoGUI:
 
     def search_reservasi(self):
         keyword = self.search_reservasi_entry.get()
+        if keyword:
+            results = self.studio.search_list('reservasi_list', 'id_reservasi', keyword)
+            for i in self.reservasi_tree.get_children():
+                self.reservasi_tree.delete(i)
+            for reservasi in results:
+                self.reservasi_tree.insert("", "end", values=(reservasi.id_reservasi, reservasi.id_pelanggan, reservasi.id_jadwal, reservasi.status))
+        else:
+            messagebox.showerror("Error", "Masukkan kata kunci untuk pencarian!")
+
+    def tambah_desain_tato(self):
+        id_desain = self.id_desain_entry.get()
+        nama_desain = self.nama_desain_entry.get()
+        deskripsi = self.deskripsi_entry.get()
+
+        if id_desain and nama_desain and deskripsi:
+            desain_tato = DesainTato(id_desain, nama_desain, deskripsi)
+            self.studio.tambah_desain_tato(desain_tato)
+            messagebox.showinfo("Sukses", "Desain Tato berhasil ditambahkan!")
+            self.lihat_desain_tato()
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi untuk tambah desain tato!")
+
+    def lihat_desain_tato(self):
+        for i in self.desain_tree.get_children():
+            self.desain_tree.delete(i)
+        desain_tato_list = self.studio.lihat_desain_tato()
+        for desain_tato in desain_tato_list:
+            self.desain_tree.insert("", "end", values=(desain_tato.id_desain, desain_tato.nama_desain, desain_tato.deskripsi))
+
+    def update_desain_tato(self):
+        id_desain = self.id_desain_entry.get()
+        nama_desain = self.nama_desain_entry.get()
+        deskripsi = self.deskripsi_entry.get()
+
+        if id_desain and nama_desain and deskripsi:
+            if self.studio.update_desain_tato(id_desain, nama_desain, deskripsi):
+                messagebox.showinfo("Sukses", "Desain Tato berhasil diupdate!")
+                self.lihat_desain_tato()
+            else:
+                messagebox.showerror("Error", "ID Desain tidak ditemukan!")
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi untuk update desain tato!")
+
+    def hapus_desain_tato(self):
+        id_desain = self.id_desain_entry.get()
+
+        if id_desain:
+            if self.studio.hapus_desain_tato(id_desain):
+                messagebox.showinfo("Sukses", "Desain Tato berhasil dihapus!")
+                self.lihat_desain_tato()
+            else:
+                messagebox.showerror("Error", "ID Desain tidak ditemukan!")
+        else:
+            messagebox.showerror("Error", "Masukkan ID Desain untuk menghapus!")
+
+    def sort_desain_tato(self):
+        sort_by = self.sort_by_desain_combobox.get()
+        self.studio.sort_list('desain_tato_list', sort_by)
+        self.lihat_desain_tato()
+
+    def search_desain_tato(self):
+        keyword = self.search_desain_entry.get()
+        if keyword:
+            results = self.studio.search_list('desain_tato_list', 'nama_desain', keyword)
+            for i in self.desain_tree.get_children():
+                self.desain_tree.delete(i)
+            for desain_tato in results:
+                self.desain_tree.insert("", "end", values=(desain_tato.id_desain, desain_tato.nama_desain, desain_tato.deskripsi))
+        else:
+            messagebox.showerror("Error", "Masukkan kata kunci untuk pencarian!")
