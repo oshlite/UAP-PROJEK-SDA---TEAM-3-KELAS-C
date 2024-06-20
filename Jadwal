@@ -1,0 +1,348 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+
+class Pelanggan:
+    def _init_(self, id_pelanggan, nama, kontak, preferensi):
+        self.id_pelanggan = id_pelanggan
+        self.nama = nama
+        self.kontak = kontak
+        self.preferensi = preferensi
+
+class Jadwal:
+    def _init_(self, id_jadwal, TatoArtist, Waktu):
+        self.id_jadwal = id_jadwal
+        self.TatoArtist = TatoArtist
+        self.Waktu = Waktu
+
+class StudioTato:
+    def _init_(self):
+        self.pelanggan_list = []
+        self.jadwal_list = []
+
+    def tambah_pelanggan(self, pelanggan):
+        self.pelanggan_list.append(pelanggan)
+
+    def tambah_jadwal(self, jadwal):
+        self.jadwal_list.append(jadwal)
+
+    def lihat_pelanggan(self):
+        return self.pelanggan_list
+
+    def lihat_jadwal(self):
+        return self.jadwal_list
+
+    def update_pelanggan(self, id_pelanggan, nama, kontak, preferensi):
+        for pelanggan in self.pelanggan_list:
+            if pelanggan.id_pelanggan == id_pelanggan:
+                pelanggan.nama = nama
+                pelanggan.kontak = kontak
+                pelanggan.preferensi = preferensi
+                return True
+        return False
+
+    def update_jadwal(self, id_jadwal, TatoArtist, Waktu):
+        for jadwal in self.jadwal_list:
+            if jadwal.id_jadwal == id_jadwal:
+                jadwal.TatoArtist = TatoArtist
+                jadwal.Waktu = Waktu
+                return True
+        return False
+
+    def hapus_pelanggan(self, id_pelanggan):
+        self.pelanggan_list = [pelanggan for pelanggan in self.pelanggan_list if pelanggan.id_pelanggan != id_pelanggan]
+        return True
+
+    def hapus_jadwal(self, id_jadwal):
+        self.jadwal_list = [jadwal for jadwal in self.jadwal_list if jadwal.id_jadwal != id_jadwal]
+        return True
+
+    def sort_list(self, list_name, attribute, reverse=False):
+        if list_name == 'pelanggan_list':
+            self.pelanggan_list.sort(key=lambda x: getattr(x, attribute), reverse=reverse)
+        elif list_name == 'jadwal_list':
+            self.jadwal_list.sort(key=lambda x: getattr(x, attribute), reverse=reverse)
+
+    def search_list(self, list_name, attribute, keyword):
+        if list_name == 'pelanggan_list':
+            return [item for item in self.pelanggan_list if keyword.lower() in str(getattr(item, attribute)).lower()]
+        elif list_name == 'jadwal_list':
+            return [item for item in self.jadwal_list if keyword.lower() in str(getattr(item, attribute)).lower()]
+
+class ManajemenStudioTatoGUI:
+    def _init_(self, root, studio):
+        self.root = root
+        self.root.title("Manajemen Studio Tato")
+        self.studio = studio
+        self.create_widgets()
+
+    def create_widgets(self):
+        self.tab_control = ttk.Notebook(self.root)
+
+        self.tab_pelanggan = ttk.Frame(self.tab_control)
+        self.tab_jadwal = ttk.Frame(self.tab_control)
+
+        self.tab_control.add(self.tab_pelanggan, text='Pelanggan')
+        self.tab_control.add(self.tab_jadwal, text='Jadwal')
+
+        self.tab_control.pack(expand=1, fill='both')
+
+        self.create_pelanggan_widgets()
+        self.create_jadwal_widgets()
+
+    def create_pelanggan_widgets(self):
+        # Frame input data
+        frame_input = ttk.Frame(self.tab_pelanggan)
+        frame_input.pack(padx=10, pady=10)
+
+        ttk.Label(frame_input, text="ID Pelanggan:").grid(column=0, row=0, padx=5, pady=5)
+        self.id_pelanggan_entry = ttk.Entry(frame_input)
+        self.id_pelanggan_entry.grid(column=1, row=0, padx=5, pady=5)
+
+        ttk.Label(frame_input, text="Nama:").grid(column=0, row=1, padx=5, pady=5)
+        self.nama_entry = ttk.Entry(frame_input)
+        self.nama_entry.grid(column=1, row=1, padx=5, pady=5)
+
+        ttk.Label(frame_input, text="Kontak:").grid(column=0, row=2, padx=5, pady=5)
+        self.kontak_entry = ttk.Entry(frame_input)
+        self.kontak_entry.grid(column=1, row=2, padx=5, pady=5)
+
+        ttk.Label(frame_input, text="Preferensi:").grid(column=0, row=3, padx=5, pady=5)
+        self.preferensi_entry = ttk.Entry(frame_input)
+        self.preferensi_entry.grid(column=1, row=3, padx=5, pady=5)
+
+        # Frame tombol
+        frame_tombol = ttk.Frame(self.tab_pelanggan)
+        frame_tombol.pack(padx=10, pady=10)
+
+        self.tambah_button = ttk.Button(frame_tombol, text="Tambah Pelanggan", command=self.tambah_pelanggan)
+        self.tambah_button.grid(column=0, row=0, padx=5, pady=5)
+
+        self.lihat_button = ttk.Button(frame_tombol, text="Lihat Pelanggan", command=self.lihat_pelanggan)
+        self.lihat_button.grid(column=1, row=0, padx=5, pady=5)
+
+        self.update_button = ttk.Button(frame_tombol, text="Update Pelanggan", command=self.update_pelanggan)
+        self.update_button.grid(column=2, row=0, padx=5, pady=5)
+
+        self.hapus_button = ttk.Button(frame_tombol, text="Hapus Pelanggan", command=self.hapus_pelanggan)
+        self.hapus_button.grid(column=3, row=0, padx=5, pady=5)
+
+        # Frame tampilan data
+        frame_data = ttk.Frame(self.tab_pelanggan)
+        frame_data.pack(padx=10, pady=10)
+
+        self.tree = ttk.Treeview(frame_data, columns=("ID Pelanggan", "Nama", "Kontak", "Preferensi"), show='headings')
+        self.tree.heading("ID Pelanggan", text="ID Pelanggan")
+        self.tree.heading("Nama", text="Nama")
+        self.tree.heading("Kontak", text="Kontak")
+        self.tree.heading("Preferensi", text="Preferensi")
+        self.tree.pack()
+
+        # Frame sorting dan searching
+        frame_sort_search = ttk.Frame(self.tab_pelanggan)
+        frame_sort_search.pack(padx=10, pady=10)
+
+        ttk.Label(frame_sort_search, text="Sort by:").grid(column=0, row=0, padx=5, pady=5)
+        self.sort_by_combobox = ttk.Combobox(frame_sort_search, values=["id_pelanggan", "nama", "kontak", "preferensi"])
+        self.sort_by_combobox.grid(column=1, row=0, padx=5, pady=5)
+
+        self.sort_button = ttk.Button(frame_sort_search, text="Sort", command=self.sort_pelanggan)
+        self.sort_button.grid(column=2, row=0, padx=5, pady=5)
+
+        ttk.Label(frame_sort_search, text="Search:").grid(column=0, row=1, padx=5, pady=5)
+        self.search_entry = ttk.Entry(frame_sort_search)
+        self.search_entry.grid(column=1, row=1, padx=5, pady=5)
+
+        self.search_button = ttk.Button(frame_sort_search, text="Search", command=self.search_pelanggan)
+        self.search_button.grid(column=2, row=1, padx=5, pady=5)
+
+    def create_jadwal_widgets(self):
+        # Frame input data
+        frame_input = ttk.Frame(self.tab_jadwal)
+        frame_input.pack(padx=10, pady=10)
+
+        ttk.Label(frame_input, text="ID Jadwal:").grid(column=0, row=0, padx=5, pady=5)
+        self.id_jadwal_entry = ttk.Entry(frame_input)
+        self.id_jadwal_entry.grid(column=1, row=0, padx=5, pady=5)
+
+        ttk.Label(frame_input, text="TatoArtist:").grid(column=0, row=1, padx=5, pady=5)
+        self.TatoArtist_entry = ttk.Entry(frame_input)
+        self.TatoArtist_entry.grid(column=1, row=1, padx=5, pady=5)
+
+        ttk.Label(frame_input, text="Waktu:").grid(column=0, row=2, padx=5, pady=5)
+        self.Waktu_entry = ttk.Entry(frame_input)
+        self.Waktu_entry.grid(column=1, row=2, padx=5, pady=5)
+
+        # Frame tombol
+        frame_tombol = ttk.Frame(self.tab_jadwal)
+        frame_tombol.pack(padx=10, pady=10)
+
+        self.tambah_jadwal_button = ttk.Button(frame_tombol, text="Tambah Jadwal", command=self.tambah_jadwal)
+        self.tambah_jadwal_button.grid(column=0, row=0, padx=5, pady=5)
+
+        self.lihat_jadwal_button = ttk.Button(frame_tombol, text="Lihat Jadwal", command=self.lihat_jadwal)
+        self.lihat_jadwal_button.grid(column=1, row=0, padx=5, pady=5)
+
+        self.update_jadwal_button = ttk.Button(frame_tombol, text="Update Jadwal", command=self.update_jadwal)
+        self.update_jadwal_button.grid(column=2, row=0, padx=5, pady=5)
+
+        self.hapus_jadwal_button = ttk.Button(frame_tombol, text="Hapus Jadwal", command=self.hapus_jadwal)
+        self.hapus_jadwal_button.grid(column=3, row=0, padx=5, pady=5)
+
+        # Frame tampilan data
+        frame_data = ttk.Frame(self.tab_jadwal)
+        frame_data.pack(padx=10, pady=10)
+
+        self.jadwal_tree = ttk.Treeview(frame_data, columns=("ID Jadwal", "TatoArtist", "Waktu"), show='headings')
+        self.jadwal_tree.heading("ID Jadwal", text="ID Jadwal")
+        self.jadwal_tree.heading("TatoArtist", text="TatoArtist")
+        self.jadwal_tree.heading("Waktu", text="Waktu")
+        self.jadwal_tree.pack()
+
+        # Frame sorting dan searching
+        frame_sort_search = ttk.Frame(self.tab_jadwal)
+        frame_sort_search.pack(padx=10, pady=10)
+
+        ttk.Label(frame_sort_search, text="Sort by:").grid(column=0, row=0, padx=5, pady=5)
+        self.sort_by_jadwal_combobox = ttk.Combobox(frame_sort_search, values=["id_jadwal", "TatoArtist", "Waktu"])
+        self.sort_by_jadwal_combobox.grid(column=1, row=0, padx=5, pady=5)
+
+        self.sort_jadwal_button = ttk.Button(frame_sort_search, text="Sort", command=self.sort_jadwal)
+        self.sort_jadwal_button.grid(column=2, row=0, padx=5, pady=5)
+
+        ttk.Label(frame_sort_search, text="Search:").grid(column=0, row=1, padx=5, pady=5)
+        self.search_jadwal_entry = ttk.Entry(frame_sort_search)
+        self.search_jadwal_entry.grid(column=1, row=1, padx=5, pady=5)
+
+        self.search_jadwal_button = ttk.Button(frame_sort_search, text="Search", command=self.search_jadwal)
+        self.search_jadwal_button.grid(column=2, row=1, padx=5, pady=5)
+
+    def tambah_pelanggan(self):
+        id_pelanggan = self.id_pelanggan_entry.get()
+        nama = self.nama_entry.get()
+        kontak = self.kontak_entry.get()
+        preferensi = self.preferensi_entry.get()
+
+        if id_pelanggan and nama and kontak and preferensi:
+            pelanggan = Pelanggan(id_pelanggan, nama, kontak, preferensi)
+            self.studio.tambah_pelanggan(pelanggan)
+            messagebox.showinfo("Sukses", "Pelanggan berhasil ditambahkan!")
+            self.lihat_pelanggan()
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi!")
+
+    def lihat_pelanggan(self):
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+        pelanggan_list = self.studio.lihat_pelanggan()
+        for pelanggan in pelanggan_list:
+            self.tree.insert("", "end", values=(pelanggan.id_pelanggan, pelanggan.nama, pelanggan.kontak, pelanggan.preferensi))
+
+    def update_pelanggan(self):
+        id_pelanggan = self.id_pelanggan_entry.get()
+        nama = self.nama_entry.get()
+        kontak = self.kontak_entry.get()
+        preferensi = self.preferensi_entry.get()
+
+        if id_pelanggan and nama and kontak and preferensi:
+            if self.studio.update_pelanggan(id_pelanggan, nama, kontak, preferensi):
+                messagebox.showinfo("Sukses", "Pelanggan berhasil diupdate!")
+                self.lihat_pelanggan()
+            else:
+                messagebox.showerror("Error", "ID Pelanggan tidak ditemukan!")
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi!")
+
+    def hapus_pelanggan(self):
+        id_pelanggan = self.id_pelanggan_entry.get()
+
+        if id_pelanggan:
+            if self.studio.hapus_pelanggan(id_pelanggan):
+                messagebox.showinfo("Sukses", "Pelanggan berhasil dihapus!")
+                self.lihat_pelanggan()
+            else:
+                messagebox.showerror("Error", "ID Pelanggan tidak ditemukan!")
+        else:
+            messagebox.showerror("Error", "ID Pelanggan harus diisi!")
+
+    def tambah_jadwal(self):
+        id_jadwal = self.id_jadwal_entry.get()
+        TatoArtist = self.TatoArtist_entry.get()
+        Waktu = self.Waktu_entry.get()
+
+        if id_jadwal and TatoArtist and Waktu:
+            jadwal = Jadwal(id_jadwal, TatoArtist, Waktu)
+            self.studio.tambah_jadwal(jadwal)
+            messagebox.showinfo("Sukses", "Jadwal berhasil ditambahkan!")
+            self.lihat_jadwal()
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi!")
+
+    def lihat_jadwal(self):
+        for i in self.jadwal_tree.get_children():
+            self.jadwal_tree.delete(i)
+        jadwal_list = self.studio.lihat_jadwal()
+        for jadwal in jadwal_list:
+            self.jadwal_tree.insert("", "end", values=(jadwal.id_jadwal, jadwal.TatoArtist, jadwal.Waktu))
+
+    def update_jadwal(self):
+        id_jadwal = self.id_jadwal_entry.get()
+        TatoArtist = self.TatoArtist_entry.get()
+        Waktu = self.Waktu_entry.get()
+
+        if id_jadwal and TatoArtist and Waktu:
+            if self.studio.update_jadwal(id_jadwal, TatoArtist, Waktu):
+                messagebox.showinfo("Sukses", "Jadwal berhasil diupdate!")
+                self.lihat_jadwal()
+            else:
+                messagebox.showerror("Error", "ID Jadwal tidak ditemukan!")
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi!")
+
+    def hapus_jadwal(self):
+        id_jadwal = self.id_jadwal_entry.get()
+
+        if id_jadwal:
+            if self.studio.hapus_jadwal(id_jadwal):
+                messagebox.showinfo("Sukses", "Jadwal berhasil dihapus!")
+                self.lihat_jadwal()
+            else:
+                messagebox.showerror("Error", "ID Jadwal tidak ditemukan!")
+        else:
+            messagebox.showerror("Error", "ID Jadwal harus diisi!")
+
+    def sort_pelanggan(self):
+        sort_by = self.sort_by_combobox.get()
+        if sort_by:
+            self.studio.sort_list('pelanggan_list', sort_by)
+            self.lihat_pelanggan()
+
+    def search_pelanggan(self):
+        keyword = self.search_entry.get()
+        if keyword:
+            pelanggan_found = self.studio.search_list('pelanggan_list', 'nama', keyword)
+            for i in self.tree.get_children():
+                self.tree.delete(i)
+            for pelanggan in pelanggan_found:
+                self.tree.insert("", "end", values=(pelanggan.id_pelanggan, pelanggan.nama, pelanggan.kontak, pelanggan.preferensi))
+
+    def sort_jadwal(self):
+        sort_by = self.sort_by_jadwal_combobox.get()
+        if sort_by:
+            self.studio.sort_list('jadwal_list', sort_by)
+            self.lihat_jadwal()
+
+    def search_jadwal(self):
+        keyword = self.search_jadwal_entry.get()
+        if keyword:
+            jadwal_found = self.studio.search_list('jadwal_list', 'TatoArtist', keyword)
+            for i in self.jadwal_tree.get_children():
+                self.jadwal_tree.delete(i)
+            for jadwal in jadwal_found:
+                self.jadwal_tree.insert("", "end", values=(jadwal.id_jadwal, jadwal.TatoArtist, jadwal.Waktu))
+
+# Main program
+if _name_ == "_main_":
+    root = tk.Tk()
+    studio = StudioTato()
+    app = ManajemenStudioTatoGUI(root, studio)
+    root.mainloop()
